@@ -92,9 +92,9 @@ title                    : "Moss GU"
 title_separator          : "-"
 name                     : "Moss GU"
 description              : "Code matters."
-url                      : "https://mossgreen.github.io"
+url                      : "https://mahmudasif.com"
 baseurl                  : #"/blog" the subpath of your site, e.g. "/blog"
-repository               :  "mossgreen/mossgreen.github.io" # GitHub username/repo-name e.g.
+repository               :  "asifmahmud/mahmudasif.com" # GitHub username/repo-name e.g.
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 # breadcrumbs            : false # true, false (default)
 words_per_minute         : #200
@@ -174,7 +174,7 @@ author:
   bio              : "No Magic."
   location         : "Auckland, New Zealand"
   email            : "mossgu@outlook.com"
-  uri              : "https://mossgreen.github.io"
+  uri              : "https://mahmudasif.com"
   home             : # null (default), "absolute or relative url to link to author home"
   bitbucket        :
   codepen          :
@@ -182,7 +182,7 @@ author:
   flickr           :
   facebook         :
   foursquare       :
-  github           : "mossgreen"
+  github           : "asifmahmud"
   gitlab           :
   google_plus      :
   keybase          :
