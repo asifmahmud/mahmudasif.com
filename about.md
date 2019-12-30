@@ -4,43 +4,15 @@ layout: page
 ---
 ![Profile Image]({{ site.url }}/{{ site.picture }})
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-<h2>Skills</h2>
-
-<ul class="skill-list">
-	<li>HTML - Jade - Haml - Erb</li>
-	<li>Responsive (Mobile First)</li>
-	<li>CSS (Stylus, Sass, Less)</li>
-	<li>Css Frameworks (Bootstrap, Foundation)</li>
-	<li>Javascript (Design Patterns, Testes)</li>
-	<li>NodeJS</li>
-	<li>AngularJS - ReactJS</li>
-	<li>Grunt - Gulp - Yeoman</li>
-	<li>Git</li>
-	<li>PHP</li>
-	<li>Python</li>
-	<li>MySQL - MongoDB</li>
-	<li>Scrum and Kanban</li>
-	<li>TDD e Continuous Integration</li>
-</ul>
+<p>I am a Software Engineer at IBM's Silicon Valley Lab, currently working as part of the Cloud Native squad of IMS team. I have been passionate about Computer Science, and engineering in general, from an early age. Problem solving is something I enjoy immensely and I knew a career in engineering is what I wanted to pursue. Hence, I prepared myself academically with that in mind. I completed my Bachelor of Science degree in Electrical Engineering, with a minor in Computer Science, from UC Irvine. I went on to obtain my Master of Science degree in Electrical and Computer Engineering from the same university.</p>
 
 <h2>Projects</h2>
-
 <ul>
-	<li><a href="https://github.com/">Lorem Lorem</a></li>
-	<li><a href="https://github.com/">Ipsum Dolor</a></li>
-	<li><a href="https://github.com/">Dolor Lorem</a></li>
+	<li><a href="https://github.com/asifmahmud/wikisearch">Wikisearch</a></li>
+	<li><a href="https://github.com/asifmahmud/identify">Identify</a></li>
+	<li><a href="https://github.com/asifmahmud/wigs">W.I.G.S.</a></li>
+	<li><a href="https://github.com/asifmahmud/Atomic-Browser">Atomic Browser</a></li>
+	<li><a href="https://github.com/asifmahmud/Sudoku-AI">Sudoku-AI</a></li>
+	<li><a href="https://github.com/asifmahmud/chirper">Chirper</a></li>
+	<li><a href="https://github.com/asifmahmud/trippy">Trippy</a></li>
 </ul>
