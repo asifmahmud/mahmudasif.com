@@ -7,7 +7,7 @@ layout: page
 <p>I am a Software Engineer at IBM's Silicon Valley Lab, currently working as part of the Cloud Native squad of IMS team. I have been passionate about Computer Science, and engineering in general, from an early age. Problem solving is something I enjoy immensely and I knew a career in engineering is what I wanted to pursue. Hence, I prepared myself academically with that in mind. I completed my Bachelor of Science degree in Electrical Engineering, with a minor in Computer Science, from UC Irvine. I went on to obtain my Master of Science degree in Electrical and Computer Engineering from the same university.</p>
 
 <p>
-I'm an avid sports lover, especially if it's Cricket, Football or Tennis. Other outdoor avtivities I enjoy are hiking and camping. Reading is something I've always had an affinity for and most of the novels I read are either fiction or fantasy, although I do enjoy a good thriller from time to time. 
+I'm an avid sports lover, especially Cricket, Soccer, Tennis and MMA. Other outdoor avtivities I enjoy are hiking and camping. Reading is something I've always had an affinity for and most of the novels I read are either fiction or fantasy, although I do enjoy a good thriller from time to time. 
 </p>
 
 <h2>Projects</h2>
