@@ -1,0 +1,32 @@
+---
+title: "Atomic Browser"
+layout: post
+date: 2017-05-23 22:10
+tag: Android App
+headerImage: true
+projects: true
+hidden: true # don't count this post in blog pagination
+description: "Web browser for Android"
+category: project
+author: asifmahmud
+externalLink: false
+---
+An Android browser built using the WebView API
+
+![Screenshot](/assets/images/at_scr3.png)
+![Screenshot](/assets/images/at_scr2.png)
+![Screenshot](/assets/images/at_scr1.png)
+
+
+
+---
+
+Technologies used:
+
+- Java
+- WebView API
+- Android Studio
+
+
+
+[Check it out](https://github.com/asifmahmud/Atomic-Browser) here.

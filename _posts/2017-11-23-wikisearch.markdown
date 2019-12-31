@@ -1,9 +1,9 @@
 ---
-title: "Wikisearch"
+title: "Wikisearch - A Wikipedia Search Engine"
 layout: post
 date: 2017-11-23 22:10
 tag: Hadoop
-# image: https://camo.githubusercontent.com/96889225ecd816b309f185b0fe4debb1573a49fb/68747470733a2f2f692e696d6775722e636f6d2f484e627943576d2e706e67
+image: /assets/images/hadoop-logo.png
 headerImage: true
 projects: true
 hidden: true # don't count this post in blog pagination
@@ -13,8 +13,9 @@ author: asifmahmud
 externalLink: false
 ---
 
-![Screenshot](https://camo.githubusercontent.com/96889225ecd816b309f185b0fe4debb1573a49fb/68747470733a2f2f692e696d6775722e636f6d2f484e627943576d2e706e67)
+![Screenshot](/assets/images/wikisearch-flow.png)
 
+Wikisearch is a search engine implementation for Wikipedia built with Hadoop, MapReduce and Cassandra.
 
 
 ---

@@ -1,0 +1,37 @@
+---
+title: "Identify"
+layout: post
+date: 2017-09-21 22:10
+tag: Android App
+image: /assets/images/react-native.jpg
+headerImage: true
+projects: true
+hidden: true # don't count this post in blog pagination
+description: "Facial recognition Android app"
+category: project
+author: asifmahmud
+externalLink: false
+---
+
+Identify is a face detection app built on the Android platform. It leverages the power of Microsoft Cognitive Services API to detect faces and facial attributes from images. It detects facial attributes such as age and gender.
+
+A picture can be picked from the Android device's photo gallery or taken directly with the camera.
+
+![Screenshot](/assets/images/scr1.jpg)
+![Screenshot](/assets/images/scr2.jpg)
+![Screenshot](/assets/images/scr3.jpg)
+![Screenshot](/assets/images/scr4.jpg)
+
+
+
+---
+
+Technologies used:
+
+- React Native
+- Microsoft Cognitive Research API
+- Android Studio
+
+
+
+[Check it out](https://github.com/asifmahmud/identify) here.
