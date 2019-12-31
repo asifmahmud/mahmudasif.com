@@ -4,6 +4,7 @@ layout: page
 ---
 ![Profile Image]({{ site.url }}/{{ site.picture }})
 
+<h2> A little about me </h2>
 <p>I am a Software Engineer at IBM's Silicon Valley Lab, currently working as part of the Cloud Native squad of IMS team. I have been passionate about Computer Science, and engineering in general, from an early age. Problem solving is something I enjoy immensely and I knew a career in engineering is what I wanted to pursue. Hence, I prepared myself academically with that in mind. I completed my Bachelor of Science degree in Electrical Engineering, with a minor in Computer Science, from UC Irvine. I went on to obtain my Master of Science degree in Electrical and Computer Engineering from the same university.</p>
 
 <p>
