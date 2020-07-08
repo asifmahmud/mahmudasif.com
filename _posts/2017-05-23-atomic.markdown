@@ -1,32 +1,175 @@
 ---
-title: "Atomic Browser"
+title: "Clone Private Git Repository with Ansible"
 layout: post
-date: 2017-05-23 22:10
-tag: Android App
+date: 2020-03-01 22:10
+tag: 
+- Ansible
+- Git
 headerImage: true
-projects: true
-hidden: true # don't count this post in blog pagination
-description: "Web browser for Android"
-category: project
+projects: false
+hidden: false # don't count this post in blog pagination
+description: "How to clone a private git repository using Ansible"
+category: blog
 author: asifmahmud
 externalLink: false
 ---
-An Android browser built using the WebView API
 
-![Screenshot](/assets/images/at_scr3.png)
-![Screenshot](/assets/images/at_scr2.png)
-![Screenshot](/assets/images/at_scr1.png)
+![Screenshot](/assets/images/blogs/ansible-git-clone/storm-troopers.jpg)
 
+### Background
+If you have ever used Ansible to clone a git repository, you may have encountered a similar problem I ran into a couple of months ago. I was working with a few of my colleagues to create a playbook that would automate the process of cloning a private repository located in IBM's enterprise GitHub. The naive Ansible developer in me thought just how hard could it be? I would simply use Ansible's `git` module and call it a day — easy peasy. It turns out, I couldn't have been more wrong! Sure, cloning a public repository using Ansible is quite easy and can be done with a few lines of YAML.
 
+    - name: Clone a public git repository
+      git:
+        repo: 'https://github.com/path/to/repo.git'
+        dest: /srv/checkout
+        version: release-0.22
 
----
-
-Technologies used:
-
-- Java
-- WebView API
-- Android Studio
+Okay, but how about a private git repository? Well, this is where it gets a bit tricky. I will be explaining the process of cloning  a private git repository using Ansible and hopefully, by the time you are done reading this blog, you will have a clearer picture of the underlying details. I am going to be assuming that you are familiar with Ansible and have previous experience developing Ansible playbooks. If you are new to Ansible and would like to learn more, [here](https://www.ansible.com/overview/how-ansible-works) is a great place to start. 
 
 
+### Problem
+Getting back to the problem at hand, if you try to use Ansible's `git` module to clone a private repository, you will likely encounter the following error:
 
-[Check it out](https://github.com/asifmahmud/Atomic-Browser) here.
+    Permission denied (publickey)
+
+This is happening because the remote machine where Ansible is trying to clone the repository into, does not have the same SSH credentials that your local machine does. As a result, the git server is unable to authenticate the clone request. At this point, two possible solutions to this problem would be:
+
+1. Create a task that copies your local SSH private key to the remote machine before performing the clone operation. It is not advisable to do this due to security concerns. If the remote machine is ever compromised, your private key would be exposed.
+
+2. Create a task or role that generates a new SSH key on the remote machine and adds the public key to the git server. Afterwards, clone the repository.
+
+We will be following the second approach by developing a role that creates a new SSH key on the remote machine, adds the public key to a GitHub account and, ultimately, clones the private repository.
+
+
+<img src="/assets/images/blogs/ansible-git-clone/flow.png" alt="drawing" width="600" style="display:block;margin-left:auto;margin-right:auto"/>
+
+### Prerequisites
+Before we jump into developing our role, there are some prerequisites that we need to satisfy. The first order of business that we need to take care of is creating a GitHub personal access token. To do that, simply go to your GitHub home page. From there, go to Settings -> Developer Settings -> Personal access tokens -> Generate new token. Make sure to select the following four scopes for your token:
+
+- repo
+- admin:public_key
+- user
+- admin:gpg_key
+
+
+<img src="/assets/images/blogs/ansible-git-clone/git-recording.gif" alt="drawing" width="1024" style="display:block;margin-left:auto;margin-right:auto"/>
+
+
+Once we have generated the token, it should be encrypted before being used in a playbook. [Ansible Vault](https://docs.ansible.com/ansible/latest/user_guide/vault.html) provides an easy way to encrypt a string and use it as a variable. To decrypt the encrypted string at run time, Ansible will prompt the user to enter the vault password. Because we want to automate the process of cloning a private repository, we don't want to stop the playbook for user input during run time. To avoid being prompted for a vault password, we will be using a vault password file. A password file can be a simple text file containing your Ansible vault password. I like to use a passphrase and encrypt it using an encryption tool:
+
+    echo "your-pass-phrase" | openssl aes-256-cbc -a -salt > /path/to/password/file​
+
+In order to let Ansible know where to look for the password file, you have two options:
+
+1. In `ansible.cfg` file, add the line: `vault_password_file = /path/to/password/file` under `[defaults]`
+
+2. Create an environment variable: `ANSIBLE_VAULT_PASSWORD_FILE=/path/to/password/file`
+
+Ok, now that we have the password file, we can finally encrypt our github access token using Ansible Vault. We will be using the encrypted token as one of the variables in our role.
+
+    ansible-vault encrypt_string '<your_github_access_token>' --name 'GITHUB_ACCESS_TOKEN' --vault-password-file=/path/to/password/file​
+
+
+<img src="/assets/images/blogs/ansible-git-clone/tty.gif" alt="drawing" width="1024" style="display:block;margin-left:auto;margin-right:auto"/>
+
+Great! Now go ahead and paste the generated encrypted variable into `vars/main.yml` file
+
+Aside from `GITHUB_ACCESS_TOKEN`, there are seven other variables that we will be using in our role:
+
+`KEY_TITLE`: The title of the SSH key to be added to the GitHub account
+
+`KEY_PATH`: Full path of the directory where the SSH key should be stored. A typical location would be `~/.ssh/id_rsa.git`
+
+`GIT_REPO`: The SSH url of the GitHub repository to be cloned. An example would be `ssh://git@github.com/zbrewdev/zbrew.git`
+
+`GIT_BRANCH`: Switch to this branch after cloning
+
+`CLONE_DEST`: The folder where repository should be cloned to
+
+`KNOWN_HOSTS_PATH`: Location of the SSH `known_hosts` file on the target machine. A typical location would be `~/.ssh/known_hosts`
+
+`GIT_EXECUTABLE`: The location of the git binary on the target machine. For example `/usr/bin/git`
+
+
+### Role Development
+Once the variables are set, let's begin developing our role. The first thing we need to do is to generate a new SSH key and capture the contents of the public key, which we will be using later.
+
+
+    - name: Check if SSH key is already present
+    stat:
+        path: "{{ KEY_PATH }}"
+    register: key_stat_result
+
+    - name: Generate SSH key for accessing GitHub
+    command: "ssh-keygen -t rsa -f {{ KEY_PATH }} -N ''"
+    when: not key_stat_result.stat.exists
+
+    - name: Get key content
+    command: "cat {{ KEY_PATH }}.pub"
+    register: key_content
+
+
+Next, we need to make sure that GitHub is present in known_hosts of the remote system. If a `known_hosts` file does not exist, it should be created.
+
+    - name: Check if known_host exists
+    stat:
+        path: "{{ KNOWN_HOSTS_PATH }}"
+    register: known_hosts_stat
+
+    - name: Create known_hosts if it doesn't exist
+    file:
+        path: "{{ KNOWN_HOSTS_PATH }}"
+        state: touch
+    when: not known_hosts_stat.stat.exists
+
+    - name: Get the content of known hosts
+    shell: "cat {{ KNOWN_HOSTS_PATH }} | grep github.com"
+    register: host_stat
+    failed_when: host_stat.rc > 1
+
+We need to fetch GitHub's public key and add it to `known_hosts` file
+
+    - name: Modify known hosts
+    block:
+    - name: Fetch GitHub public key
+        command: ssh-keyscan -T 10 github.com
+        register: keyscan
+
+    - name: Add GitHub public key to ssh known_hosts
+        lineinfile:
+        path: "{{ KNOWN_HOSTS_PATH }}"
+        create: yes
+        line: "{{ item }}"
+        with_items: '{{ keyscan.stdout_lines }}'
+    when: host_stat.rc == 1
+
+Once we have added GitHub's public key to `known_hosts` file, we need to make sure the SSH key that we generated is added to your GitHub account. In order to do so, we will be using GitHub's REST API to send a POST request with the key content as payload and the personal access token for authentication. If the key we are trying to add is already being used, then the task should continue without failing.
+
+    - name: Add SSH public key to GitHub account
+    uri:
+        url: https://api.github.com/user/keys
+        validate_certs: no
+        method: POST
+        body:
+        title: "{{ KEY_TITLE }}"
+        key: "{{ key_content.stdout }}"
+        body_format: json
+        headers:
+        Content-Type: "application/json"
+        Authorization: "token {{ GITHUB_ACCESS_TOKEN }}"
+    register: task_log
+    failed_when: task_log.content.find('key is already in use') == 0
+
+Finally, the moment of truth! Before executing git clone, the GIT_SSH_COMMAND environment variable should be set with the correct SSH key path.
+
+    - name: Clone the repository
+    shell: GIT_SSH_COMMAND="ssh -i {{ KEY_PATH }} -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" {{ GIT_EXECUTABLE }} clone {{ GIT_REPO }} {{ CLONE_DEST }}
+
+And there you have it! If all goes well, the private repository should be cloned to the destination specified by `CLONE_DEST` variable. You can check out the complete role [here](https://github.com/asifmahmud/ansible-git-clone.git).
+
+### Special Thanks
+[Mike Fulton](https://makingdeveloperslivesbetter.wordpress.com/)
+
+[Jeff Geerling](https://github.com/geerlingguy)
+
